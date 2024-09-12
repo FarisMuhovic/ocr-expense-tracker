@@ -1,13 +1,35 @@
-import React, {useState} from "react"
+import {useState} from "react"
+
+interface FormData {
+  email: string
+  password: string
+  rememberMe: boolean
+}
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+    rememberMe: false,
+  })
+  const [showPassword, setShowPassword] = useState(false)
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value, type, checked} = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }))
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Handle login logic here
-    console.log({email, password})
+    console.log(formData)
+  }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(prevShowPassword => !prevShowPassword)
   }
 
   return (
@@ -22,8 +44,9 @@ const Login: React.FC = () => {
             <input
               type="email"
               id="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
               className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
               placeholder="Enter your email"
               required
@@ -33,15 +56,38 @@ const Login: React.FC = () => {
             <label htmlFor="password" className="block text-sm font-medium">
               Password
             </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-3 flex items-center text-gray-600 focus:outline-none"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
+          <div className="flex items-center">
             <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
-              placeholder="Enter your password"
-              required
+              type="checkbox"
+              id="rememberMe"
+              name="rememberMe"
+              checked={formData.rememberMe}
+              onChange={handleInputChange}
+              className="mr-2 h-4 w-4 border-gray-300 rounded text-blue-600 focus:ring-blue-500"
             />
+            <label htmlFor="rememberMe" className="text-sm">
+              Remember me
+            </label>
           </div>
           <button
             type="submit"

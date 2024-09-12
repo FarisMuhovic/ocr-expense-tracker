@@ -1,14 +1,38 @@
-import React, {useState} from "react"
+import {useState} from "react"
+
+interface FormData {
+  email: string
+  password: string
+  confirmPassword: string
+}
 
 const Register: React.FC = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (!passwordsMatch()) {
+      alert("Passwords do not match!")
+      return
+    }
     // Handle register logic here
-    console.log({email, password, confirmPassword})
+    console.log(formData)
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const passwordsMatch = () => {
+    return formData.password === formData.confirmPassword
   }
 
   return (
@@ -23,8 +47,9 @@ const Register: React.FC = () => {
             <input
               type="email"
               id="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
               className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
               placeholder="Enter your email"
               required
@@ -37,8 +62,9 @@ const Register: React.FC = () => {
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
               className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
               placeholder="Enter your password"
               required
@@ -54,8 +80,9 @@ const Register: React.FC = () => {
             <input
               type="password"
               id="confirmPassword"
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
               className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
               placeholder="Confirm your password"
               required
