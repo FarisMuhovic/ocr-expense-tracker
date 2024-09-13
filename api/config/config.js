@@ -4,7 +4,7 @@ const setupRoutes = require("./routers")
 
 const configureServer = app => {
   const port = process.env.PORT || 3000
-  const clientUrl = process.env.CLIENT_URL || "http://localhost:5173"
+  const clientUrl = process.env.CLIENT_URL || "http://localhost:5173" // vite default port
 
   app.use(express.json())
   app.use(
@@ -14,7 +14,7 @@ const configureServer = app => {
       credentials: true,
     })
   )
-  setupRoutes(app)
+  app.use("/api/v1", setupRoutes())
   return {port}
 }
 
