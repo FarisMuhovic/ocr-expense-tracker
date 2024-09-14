@@ -1,4 +1,7 @@
 import {useState} from "react"
+import axios from "axios"
+
+const API_URL = import.meta.env.VITE_API_URL
 
 interface FormData {
   email: string
@@ -12,7 +15,9 @@ const Login: React.FC = () => {
     password: "",
     rememberMe: false,
   })
+
   const [showPassword, setShowPassword] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value, type, checked} = e.target
@@ -22,10 +27,17 @@ const Login: React.FC = () => {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle login logic here
-    console.log(formData)
+
+    try {
+      const response = await axios.post(`${API_URL}/auth/login`, formData)
+
+      alert("Login successful!")
+    } catch (error: any) {
+      setErrorMessage(error.response?.data?.message || "Login failed!")
+      console.error("Login error:", error)
+    }
   }
 
   const togglePasswordVisibility = () => {
@@ -36,6 +48,11 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+
+        {errorMessage && (
+          <div className="mb-4 text-red-600 text-center">{errorMessage}</div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium">

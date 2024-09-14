@@ -1,4 +1,7 @@
 import {useState} from "react"
+import axios from "axios"
+
+const API_URL = import.meta.env.VITE_API_URL
 
 interface FormData {
   email: string
@@ -13,14 +16,25 @@ const Register: React.FC = () => {
     confirmPassword: "",
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!passwordsMatch()) {
+
+    if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!")
       return
     }
-    // Handle register logic here
-    console.log(formData)
+
+    try {
+      const response = await axios.post(`${API_URL}/auth/register`, formData)
+
+      alert("Registration successful!")
+    } catch (error: any) {
+      setErrorMessage(
+        error.response?.data?.message || "An error occurred during registration"
+      )
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,14 +45,15 @@ const Register: React.FC = () => {
     }))
   }
 
-  const passwordsMatch = () => {
-    return formData.password === formData.confirmPassword
-  }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+
+        {errorMessage && (
+          <div className="mb-4 text-red-600 text-center">{errorMessage}</div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium">
