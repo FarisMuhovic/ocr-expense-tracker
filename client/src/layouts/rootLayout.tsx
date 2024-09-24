@@ -7,7 +7,7 @@ const RootLayout: React.FC = () => {
     <div className="flex">
       <Sidebar />
       <main className="flex-1 p-10">
-        <Outlet /> {/* Renders child routes here */}
+        <Outlet />
       </main>
     </div>
   )

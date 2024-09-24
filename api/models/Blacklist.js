@@ -1,7 +1,6 @@
 const mongoose = require("mongoose")
 
 const blacklistSchema = new mongoose.Schema({
-  // jwt id
   jti: {
     type: String,
     required: true,
@@ -9,7 +8,7 @@ const blacklistSchema = new mongoose.Schema({
   expireAt: {
     type: Date,
     default: Date.now,
-    index: {expires: "1h"},
+    index: {expires: "3h"},
   },
 })
 

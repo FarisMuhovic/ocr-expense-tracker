@@ -1,5 +1,6 @@
 import {useState} from "react"
 import axios from "axios"
+import {useNavigate} from "react-router-dom"
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -10,6 +11,7 @@ interface FormData {
 }
 
 const Login: React.FC = () => {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -32,8 +34,9 @@ const Login: React.FC = () => {
 
     try {
       const response = await axios.post(`${API_URL}/auth/login`, formData)
-
+      localStorage.setItem("jwt", response.data.token)
       alert("Login successful!")
+      navigate("/") 
     } catch (error: any) {
       setErrorMessage(error.response?.data?.message || "Login failed!")
       console.error("Login error:", error)

@@ -1,12 +1,7 @@
 import React from "react"
-import {Link, useNavigate} from "react-router-dom"
-import {
-  FaHome,
-  FaMoneyCheckAlt,
-  FaReceipt,
-  FaCogs,
-  FaSignOutAlt,
-} from "react-icons/fa"
+import {Link} from "react-router-dom"
+import {FaHome, FaMoneyCheckAlt, FaReceipt, FaCogs} from "react-icons/fa"
+import LogoutButton from "./LogoutButton"
 
 interface SidebarLink {
   label: string
@@ -34,13 +29,6 @@ const links: SidebarLink[] = [
 ]
 
 const Sidebar: React.FC = () => {
-  const navigate = useNavigate()
-
-  const handleLogout = () => {
-    localStorage.removeItem("jwt")
-    navigate("/login")
-  }
-
   return (
     <div className="min-h-screen w-64 bg-gray-800 text-white flex flex-col justify-between">
       <div>
@@ -63,15 +51,8 @@ const Sidebar: React.FC = () => {
           </ul>
         </nav>
       </div>
-
       <div className="p-6">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center justify-center py-2.5 px-4 bg-red-600 rounded text-center transition duration-200 hover:bg-red-700"
-        >
-          <FaSignOutAlt className="mr-3 text-xl text-white" />
-          Log Out
-        </button>
+        <LogoutButton />
       </div>
     </div>
   )

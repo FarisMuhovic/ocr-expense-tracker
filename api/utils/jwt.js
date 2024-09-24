@@ -1,9 +1,19 @@
 const jwt = require("jsonwebtoken")
 const Blacklist = require("../models/Blacklist")
+const {v4: uuidv4} = require("uuid")
 
 const generateToken = (userId, rememberMe = false) => {
   const expiresIn = rememberMe ? "2d" : process.env.JWT_EXPIRATION
-  return jwt.sign({id: userId}, process.env.JWT_SECRET, {expiresIn})
+  return jwt.sign(
+    {
+      id: userId,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn,
+      jwtid: uuidv4(),
+    }
+  )
 }
 
 const verifyToken = async token => {

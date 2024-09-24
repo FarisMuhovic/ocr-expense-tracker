@@ -5,9 +5,7 @@ const PublicLayout: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
 
   useEffect(() => {
-    // Simulate checking if the user is logged in
     const token = localStorage.getItem("jwt")
-
     if (token) {
       setIsAuthenticated(true)
     } else {
@@ -19,7 +17,7 @@ const PublicLayout: React.FC = () => {
     return <div>Loading...</div> // Or a spinner
   }
 
-  return isAuthenticated ? <Navigate to="/dashboard" /> : <Outlet />
+  return isAuthenticated ? <Navigate to="/" /> : <Outlet />
 }
 
 export default PublicLayout

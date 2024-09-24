@@ -4,12 +4,16 @@ const registerController = async (req, res) => {
   const {email, password, confirmPassword} = req.body
 
   try {
-    const {code, message} = await AuthService.register(
+    const {code, message, token} = await AuthService.register(
       email,
       password,
       confirmPassword
     )
-    return res.status(code).json({message})
+    if (token) {
+      return res.status(code).json({message, token})
+    } else {
+      return res.status(code).json({message})
+    }
   } catch (error) {
     console.error("Error registering user:", error)
     return res

@@ -20,7 +20,8 @@ const register = async (email, password, confirmPassword) => {
   const newUser = new User({email, password: hashedPassword})
   await newUser.save()
 
-  return {code: 201, message: "User registered successfully"}
+  const token = generateToken(newUser.id, false)
+  return {code: 201, message: "User registered successfully", token}
 }
 
 const login = async (email, password, rememberMe) => {
