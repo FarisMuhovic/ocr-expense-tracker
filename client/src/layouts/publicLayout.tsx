@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react"
 import {Navigate, Outlet} from "react-router-dom"
+import Loader from "../components/Spinner"
 
 const PublicLayout: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
@@ -14,7 +15,7 @@ const PublicLayout: React.FC = () => {
   }, [])
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div> // Or a spinner
+    return <Loader />
   }
 
   return isAuthenticated ? <Navigate to="/" /> : <Outlet />

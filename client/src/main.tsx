@@ -2,7 +2,7 @@ import {StrictMode} from "react"
 import {createRoot} from "react-dom/client"
 import {createBrowserRouter, RouterProvider} from "react-router-dom"
 import "./index.css"
-import RootLayout from "./layouts/rootlayout"
+import RootLayout from "./layouts/rootLayout"
 import PublicLayout from "./layouts/publicLayout"
 import ProtectedLayout from "./layouts/protectedLayout"
 import Login from "./pages/login"
@@ -12,10 +12,11 @@ import Subscriptions from "./pages/subscriptions"
 import Transactions from "./pages/transactions"
 import Settings from "./pages/settings"
 import NotFound from "./pages/notFound"
+import Receipts from "./pages/receipts"
 
 const router = createBrowserRouter([
   {
-    element: <PublicLayout />, // Routes for public pages
+    element: <PublicLayout />,
     children: [
       {
         path: "/login",
@@ -28,14 +29,18 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <ProtectedLayout />, // Protect these routes with JWT auth
+    element: <ProtectedLayout />,
     children: [
       {
-        element: <RootLayout />, // Layout for the dashboard with sidebar
+        element: <RootLayout />,
         children: [
           {
             path: "/",
             element: <Dashboard />,
+          },
+          {
+            path: "/receipts",
+            element: <Receipts />,
           },
           {
             path: "/transactions",
