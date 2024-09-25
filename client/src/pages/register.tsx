@@ -1,14 +1,11 @@
 import {useState} from "react"
 import axios from "axios"
 import {useNavigate} from "react-router-dom"
+import {Toast} from "flowbite-react"
+import {HiCheck, HiExclamation} from "react-icons/hi"
+import FormData from "../interfaces/registerFormData"
 
 const API_URL = import.meta.env.VITE_API_URL
-
-interface FormData {
-  email: string
-  password: string
-  confirmPassword: string
-}
 
 const Register: React.FC = () => {
   const navigate = useNavigate()
@@ -18,26 +15,20 @@ const Register: React.FC = () => {
     confirmPassword: "",
   })
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [toasts, setToasts] = useState<
+    {id: number; type: "success" | "error"; message: string}[]
+  >([])
+  const [idCounter, setIdCounter] = useState(0)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const addToast = (type: "success" | "error", message: string) => {
+    const newToast = {id: idCounter, type, message}
+    setToasts(prev => [...prev, newToast])
+    setIdCounter(prev => prev + 1)
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!")
-      return
-    }
-
-    try {
-      const response = await axios.post(`${API_URL}/auth/register`, formData)
-      localStorage.setItem("jwt", response.data.token)
-      alert("Registration successful!")
-      navigate("/") 
-    } catch (error: any) {
-      setErrorMessage(
-        error.response?.data?.message || "An error occurred during registration"
-      )
-    }
+    // Automatically remove the toast after a certain duration
+    setTimeout(() => {
+      setToasts(prev => prev.filter(t => t.id !== newToast.id))
+    }, 3000) // Toast duration (3 seconds)
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,14 +39,31 @@ const Register: React.FC = () => {
     }))
   }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (formData.password !== formData.confirmPassword) {
+      addToast("error", "Passwords do not match!")
+      return
+    }
+
+    try {
+      const response = await axios.post(`${API_URL}/auth/register`, formData)
+      localStorage.setItem("jwt", response.data.token)
+      addToast("success", "Registration successful!")
+      navigate("/")
+    } catch (error: any) {
+      addToast(
+        "error",
+        error.response?.data?.message || "Internal Server Error"
+      )
+    }
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
-
-        {errorMessage && (
-          <div className="mb-4 text-red-600 text-center">{errorMessage}</div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -118,6 +126,23 @@ const Register: React.FC = () => {
             Already have an account? Login
           </a>
         </div>
+      </div>
+
+      {/* Toast Notifications */}
+      <div className="fixed top-0 right-0 p-4 space-y-2 z-50 min-w-80">
+        {toasts.map(toast => (
+          <Toast key={toast.id}>
+            <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+              {toast.type === "success" ? (
+                <HiCheck className="h-5 w-5" />
+              ) : (
+                <HiExclamation className="h-5 w-5 text-red-500" />
+              )}
+            </div>
+            <div className="ml-3 text-sm font-normal">{toast.message}</div>
+            <Toast.Toggle />
+          </Toast>
+        ))}
       </div>
     </div>
   )
