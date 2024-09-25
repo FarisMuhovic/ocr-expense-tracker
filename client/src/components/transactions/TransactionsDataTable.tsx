@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react"
 import DataTable from "react-data-table-component"
 import axios from "axios"
-import Subscription from "../../interfaces/subscriptionOutput"
+import Transaction from "../../interfaces/transactionOutput"
 import {Button, Modal} from "flowbite-react"
-import EditSubscriptionModal from "./EditSubscriptionModal"
+import EditTransactionModal from "./EditTransactionModal"
 import {useNavigate} from "react-router-dom"
 import ToastNotification from "../ToastNotification"
 
@@ -14,37 +14,35 @@ interface Props {
   fetchTrigger: boolean
 }
 
-const SubscriptionTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
+const TransactionsTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
   const navigate = useNavigate()
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [selectedSubscriptionId, setSelectedSubscriptionId] = useState<
+  const [selectedTransactionId, setSelectedTransactionId] = useState<
     string | null
   >(null)
-  const [noteModalOpen, setNoteModalOpen] = useState(false)
-  const [noteContent, setNoteContent] = useState<string>("")
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [toasts, setToasts] = useState<
     {id: number; type: "success" | "error"; message: string}[]
   >([])
   const [idCounter, setIdCounter] = useState(0)
 
-  const fetchSubscriptions = async () => {
+  const fetchTransactions = async () => {
     try {
       const token = localStorage.getItem("jwt")
       if (!token) {
         navigate("/login")
         return
       }
-      const response = await axios.get(`${API_URL}/subscriptions`, {
+      const response = await axios.get(`${API_URL}/transactions`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      setSubscriptions(response.data)
+      setTransactions(response.data)
     } catch (error: any) {
-      console.error("Error fetching subscriptions:", error)
+      console.error("Error fetching transactions:", error)
       if (error.response?.status === 401) {
         localStorage.removeItem("jwt")
         navigate("/login")
@@ -55,26 +53,21 @@ const SubscriptionTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
   }
 
   useEffect(() => {
-    fetchSubscriptions()
+    fetchTransactions()
   }, [fetchTrigger])
 
-  const filteredSubscriptions = subscriptions.filter(subscription =>
-    subscription.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTransactions = transactions.filter(transaction =>
+    transaction.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const handleEdit = (id: string) => {
-    setSelectedSubscriptionId(id)
+    setSelectedTransactionId(id)
     setEditModalOpen(true)
   }
 
   const handleDeleteClick = (id: string) => {
-    setSelectedSubscriptionId(id)
+    setSelectedTransactionId(id)
     setDeleteModalOpen(true)
-  }
-
-  const handleViewNote = (note: string) => {
-    setNoteContent(note)
-    setNoteModalOpen(true)
   }
 
   const addToast = (type: "success" | "error", message: string) => {
@@ -93,28 +86,28 @@ const SubscriptionTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
       navigate("/login")
       return
     }
-    if (!selectedSubscriptionId) {
-      console.error("No subscription selected")
+    if (!selectedTransactionId) {
+      console.error("No transaction selected")
       return
     }
     try {
-      await axios.delete(`${API_URL}/subscriptions/${selectedSubscriptionId}`, {
+      await axios.delete(`${API_URL}/transactions/${selectedTransactionId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      fetchSubscriptions()
-      addToast("success", "Successfully deleted the subscription!")
+      fetchTransactions()
+      addToast("success", "Successfully deleted the transaction!")
     } catch (error: any) {
-      console.error("Error deleting subscription:", error)
-      addToast("error", "Failed to delete the subscription!")
+      console.error("Error deleting transaction:", error)
+      addToast("error", "Failed to delete the transaction!")
       if (error.response?.status === 401) {
         localStorage.removeItem("jwt")
         navigate("/login")
       }
     } finally {
       setDeleteModalOpen(false)
-      setSelectedSubscriptionId(null)
+      setSelectedTransactionId(null)
     }
   }
   const removeToast = (id: number) => {
@@ -122,45 +115,36 @@ const SubscriptionTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
   }
   const columns = [
     {
-      name: "Subscription Name",
-      selector: (row: Subscription) => row.name,
+      name: "Transaction Name",
+      selector: (row: Transaction) => row.name,
       sortable: true,
-      sortFunction: (a: Subscription, b: Subscription) => {
+      sortFunction: (a: Transaction, b: Transaction) => {
         return a.name.localeCompare(b.name)
       },
     },
     {
       name: "Pricing",
-      selector: (row: Subscription) => row.pricing,
+      selector: (row: Transaction) => row.price,
       sortable: true,
-      cell: (row: Subscription) => `$${row.pricing.toFixed(2)}`,
-    },
-
-    {
-      name: "Billing Cycle",
-      selector: (row: Subscription) => row.billingCycle,
+      cell: (row: Transaction) => `$${row.price.toFixed(2)}`,
     },
     {
-      name: "Start Date",
-      selector: (row: Subscription) =>
-        new Date(row.startDate).toLocaleDateString(),
+      name: "Quantity",
+      selector: (row: Transaction) => row.quantity,
+      sortable: true,
     },
     {
-      name: "Notes",
-      cell: (row: Subscription) =>
-        row.notes ? (
-          <button
-            className="bg-green-300 p-2"
-            onClick={() => handleViewNote(row.notes)}
-          >
-            See Note
-          </button>
-        ) : null,
-      ignoreRowClick: true,
+      name: "Date",
+      selector: (row: Transaction) => new Date(row.date).toLocaleDateString(),
+    },
+    {
+      name: "Category",
+      selector: (row: Transaction) => row.category,
+      sortable: true,
     },
     {
       name: "Actions",
-      cell: (row: Subscription) => (
+      cell: (row: Transaction) => (
         <div className="flex gap-2">
           <button
             className="bg-blue-300 p-2"
@@ -183,38 +167,27 @@ const SubscriptionTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
   return (
     <div className="border-[1px] border-gray-400 rounded-lg">
       <DataTable
-        title="Subscription List"
+        title="Transaction List"
         columns={columns}
-        data={filteredSubscriptions}
+        data={filteredTransactions}
         progressPending={loading}
         pagination
       />
-      <EditSubscriptionModal
+      <EditTransactionModal
         open={editModalOpen}
         onClose={() => setEditModalOpen(false)}
-        subscriptionId={selectedSubscriptionId}
-        fetchSubscriptions={fetchSubscriptions}
+        transactionId={selectedTransactionId}
+        fetchTransactions={fetchTransactions}
       />
       <Modal show={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
-        <Modal.Header>Delete Subscription</Modal.Header>
+        <Modal.Header>Delete Transaction</Modal.Header>
         <Modal.Body>
-          Are you sure you want to delete this subscription?
+          Are you sure you want to delete this transaction?
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleDelete}>Delete</Button>
           <Button color="gray" onClick={() => setDeleteModalOpen(false)}>
             Cancel
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal show={noteModalOpen} onClose={() => setNoteModalOpen(false)}>
-        <Modal.Header>Note</Modal.Header>
-        <Modal.Body>
-          <p>{noteContent}</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button color="gray" onClick={() => setNoteModalOpen(false)}>
-            Close
           </Button>
         </Modal.Footer>
       </Modal>
@@ -234,4 +207,4 @@ const SubscriptionTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
   )
 }
 
-export default SubscriptionTable
+export default TransactionsTable
