@@ -10,7 +10,12 @@ interface SidebarLink {
 }
 
 const links: SidebarLink[] = [
-  {label: "Home", to: "/", icon: <FaHome className="text-xl text-blue-400" />},
+  {label: "Home", to: "/", icon: <FaHome className="text-xl text-gray-400" />},
+  {
+    label: "Receipts",
+    to: "/receipts",
+    icon: <FaReceipt className="text-xl text-blue-400" />,
+  },
   {
     label: "Transactions",
     to: "/transactions",
