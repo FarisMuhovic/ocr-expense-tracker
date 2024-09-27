@@ -181,7 +181,6 @@ const SubscriptionTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
         </div>
       ),
       ignoreRowClick: true,
-      // expand width
     },
   ]
 

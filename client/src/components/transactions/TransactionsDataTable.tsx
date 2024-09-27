@@ -127,15 +127,18 @@ const TransactionsTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
       selector: (row: Transaction) => row.price,
       sortable: true,
       cell: (row: Transaction) => `$${row.price.toFixed(2)}`,
+      width: "125px",
     },
     {
       name: "Quantity",
       selector: (row: Transaction) => row.quantity,
       sortable: true,
+      width: "125px",
     },
     {
       name: "Date",
       selector: (row: Transaction) => new Date(row.date).toLocaleDateString(),
+      width: "125px",
     },
     {
       name: "Category",

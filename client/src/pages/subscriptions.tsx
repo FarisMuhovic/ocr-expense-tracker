@@ -21,21 +21,23 @@ const Subscriptions: React.FC = () => {
 
   return (
     <div className="flex">
-      <div className="flex gap-6 flex-col flex-1 p-4">
+      <div className="flex gap-6 flex-col flex-1 p-4 overflow-x-auto">
         <h4 className="text-xl py-2 font-semibold">
           Subscriptions - add reocurring payments here.
         </h4>
-        <div className="flex pl-4 place-items-center gap-2 border-[1px] border-gray-700 shadow-sm h-12">
-          <FaSearch className="w-6 h-6" />
-          <input
-            type="search"
-            name="search"
-            id="search-bar"
-            placeholder="Search for a subscription by name"
-            className="bg-transparent border-none focus:ring-0 w-full"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
+        <div className="flex  place-items-center  border-gray-700 h-12">
+          <div className="flex items-center border-[1px] border-gray-300 gap-2 w-full pl-4">
+            <FaSearch className="w-5 h-5 text-gray-500" />
+            <input
+              type="search"
+              name="search"
+              id="search-bar"
+              placeholder="Search for a subscription by name"
+              className="bg-transparent border-none focus:outline-none focus:ring-0 w-full py-2 h-12"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
           <button
             className="w-64 ml-auto h-full bg-blue-400"
             onClick={() => setOpenModal(true)}
@@ -50,7 +52,7 @@ const Subscriptions: React.FC = () => {
             setFetchTrigger={setFetchTrigger}
           />
         </div>
-        <div className="overflow-scroll">
+        <div className="overflow-x-auto">
           <SubscriptionTable
             searchTerm={searchTerm}
             fetchTrigger={fetchTrigger}
