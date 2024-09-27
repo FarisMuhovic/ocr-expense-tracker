@@ -150,35 +150,37 @@ const Settings: React.FC = () => {
   }
 
   return (
-    <div className="flex">
-      <div className="flex-1 p-10">
-        <h4 className="text-xl font-semibold mb-4">
-          Settings - Manage your account settings here
-        </h4>
-        <hr />
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">Profile</h3>
+    <div className="flex flex-col md:flex-row  mx-auto p-1 md:p-6 bg-white shadow-md rounded-lg">
+      <div className="flex-1 p-4">
+        <h4 className="text-2xl font-bold mb-6">Settings</h4>
+        <p className="text-gray-600 mb-8">Manage your account settings here</p>
+        <hr className="mb-6" />
+
+        <div className="mb-8">
+          <h3 className="text-xl font-semibold mb-4">Profile</h3>
           <form onSubmit={handleSubmitProfile} className="space-y-4">
-            <label className="block">
-              <span className="font-medium">First Name</span>
-              <input
-                type="text"
-                name="firstName"
-                value={profile.firstName}
-                onChange={handleProfileChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              />
-            </label>
-            <label className="block">
-              <span className="font-medium">Last Name</span>
-              <input
-                type="text"
-                name="lastName"
-                value={profile.lastName}
-                onChange={handleProfileChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              />
-            </label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label className="block">
+                <span className="font-medium">First Name</span>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={profile.firstName}
+                  onChange={handleProfileChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300"
+                />
+              </label>
+              <label className="block">
+                <span className="font-medium">Last Name</span>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={profile.lastName}
+                  onChange={handleProfileChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300"
+                />
+              </label>
+            </div>
             <label className="block">
               <span className="font-medium">Email</span>
               <input
@@ -187,79 +189,82 @@ const Settings: React.FC = () => {
                 name="email"
                 value={profile.email}
                 disabled
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200"
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200 cursor-not-allowed"
               />
             </label>
             <button
               type="submit"
-              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md"
+              className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition duration-200"
             >
               Save Changes
             </button>
           </form>
         </div>
-        <hr />
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">Change Password</h3>
+
+        <hr className="mb-6" />
+
+        <div className="mb-8">
+          <h3 className="text-xl font-semibold mb-4">Change Password</h3>
           <form onSubmit={handleSubmitPassword} className="space-y-4">
             <label className="block">
-              <span className="font-medium">Current Password:</span>
+              <span className="font-medium">Current Password</span>
               <input
                 type="password"
                 name="currentPassword"
                 value={passwords.currentPassword}
                 onChange={handlePasswordChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300"
               />
             </label>
             <label className="block">
-              <span className="font-medium">New Password:</span>
+              <span className="font-medium">New Password</span>
               <input
                 type="password"
                 name="newPassword"
                 value={passwords.newPassword}
                 onChange={handlePasswordChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300"
               />
             </label>
             <label className="block">
-              <span className="font-medium">Repeat New Password:</span>
+              <span className="font-medium">Repeat New Password</span>
               <input
                 type="password"
                 name="repeatNewPassword"
                 value={passwords.repeatNewPassword}
                 onChange={handlePasswordChange}
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300"
               />
             </label>
             <button
               type="submit"
-              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md"
+              className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition duration-200"
             >
               Change Password
             </button>
           </form>
         </div>
-        <hr />
-        <div className="flex justify-between items-center mt-8">
-          <div className="flex items-center space-x-4">
-            <label htmlFor="currency" className="font-medium">
-              Currency:
-            </label>
-            <select
-              id="currency"
-              value={currency}
-              onChange={e => changeCurrency(e.target.value)}
-              className="border border-gray-300 rounded-md p-2"
-            >
-              <option value="KM">KM</option>
-              <option value="EUR">Euro</option>
-              <option value="USD">Dollar</option>
-            </select>
-          </div>
+
+        <hr className="mb-6" />
+
+        <div className="flex flex-col md:flex-row gap-4 items-center mt-8">
+          <label htmlFor="currency" className="font-medium mb-2 md:mb-0">
+            Currency:
+          </label>
+          <select
+            id="currency"
+            value={currency}
+            onChange={e => changeCurrency(e.target.value)}
+            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-300"
+          >
+            <option value="KM">KM</option>
+            <option value="EUR">Euro</option>
+            <option value="USD">Dollar</option>
+          </select>
         </div>
       </div>
-      <div className="fixed top-0 right-0 p-6">
+
+      <div className="fixed top-0 right-0 p-6 max-w-sm w-full z-50">
         {toasts.map(toast => (
           <ToastNotification
             key={toast.id}
@@ -273,5 +278,4 @@ const Settings: React.FC = () => {
     </div>
   )
 }
-
 export default Settings

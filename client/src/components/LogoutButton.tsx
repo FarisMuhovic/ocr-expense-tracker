@@ -16,18 +16,16 @@ const LogoutButton: React.FC = () => {
     }
 
     try {
-      // Send the logout request to the backend
       await axios.post(
-        `${API_URL}/auth/logout`, // Update the endpoint to match your backend route
+        `${API_URL}/auth/logout`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in Authorization header
+            Authorization: `Bearer ${token}`,
           },
         }
       )
 
-      // Remove the token from localStorage after successful logout
       localStorage.removeItem("jwt")
       navigate("/login")
     } catch (error) {
@@ -38,10 +36,10 @@ const LogoutButton: React.FC = () => {
   return (
     <button
       onClick={handleLogout}
-      className="w-full flex items-center justify-center py-2.5 px-4 bg-red-600 rounded text-center transition duration-200 hover:bg-red-700"
+      className=" flex items-center justify-center py-2.5 px-4 rounded text-center transition duration-200 "
     >
-      <FaSignOutAlt className="mr-3 text-xl text-white" />
-      Log Out
+      <FaSignOutAlt className=" text-2xl text-red-500" />
+      <span className="hidden md:inline min-w-16">Log Out</span>
     </button>
   )
 }
