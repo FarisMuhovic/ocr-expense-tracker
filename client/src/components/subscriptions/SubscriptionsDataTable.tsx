@@ -134,42 +134,46 @@ const SubscriptionTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
       selector: (row: Subscription) => row.pricing,
       sortable: true,
       cell: (row: Subscription) => `$${row.pricing.toFixed(2)}`,
+      width: "100px",
     },
 
     {
       name: "Billing Cycle",
       selector: (row: Subscription) => row.billingCycle,
+      width: "125px",
     },
     {
       name: "Start Date",
       selector: (row: Subscription) =>
         new Date(row.startDate).toLocaleDateString(),
+      width: "125px",
     },
     {
       name: "Notes",
       cell: (row: Subscription) =>
         row.notes ? (
           <button
-            className="bg-green-300 p-2"
+            className="bg-green-300 py-2 px-4"
             onClick={() => handleViewNote(row.notes)}
           >
             See Note
           </button>
         ) : null,
       ignoreRowClick: true,
+      width: "125px",
     },
     {
       name: "Actions",
       cell: (row: Subscription) => (
-        <div className="flex gap-2">
+        <div className="flex gap-2 md:flex-row flex-col">
           <button
-            className="bg-blue-300 p-2"
+            className="bg-blue-300 py-2 px-4"
             onClick={() => handleEdit(row._id)}
           >
             Edit
           </button>
           <button
-            className="bg-red-300 p-2"
+            className="bg-red-300 py-2 px-4"
             onClick={() => handleDeleteClick(row._id)}
           >
             Delete
@@ -177,17 +181,19 @@ const SubscriptionTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
         </div>
       ),
       ignoreRowClick: true,
+      // expand width
     },
   ]
 
   return (
-    <div className="border-[1px] border-gray-400 rounded-lg">
+    <div className="border-[1px] border-gray-400 ">
       <DataTable
         title="Subscription List"
         columns={columns}
         data={filteredSubscriptions}
         progressPending={loading}
         pagination
+        responsive
       />
       <EditSubscriptionModal
         open={editModalOpen}

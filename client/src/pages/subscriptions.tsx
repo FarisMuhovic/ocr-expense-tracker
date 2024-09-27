@@ -50,10 +50,12 @@ const Subscriptions: React.FC = () => {
             setFetchTrigger={setFetchTrigger}
           />
         </div>
-        <SubscriptionTable
-          searchTerm={searchTerm}
-          fetchTrigger={fetchTrigger}
-        />
+        <div className="overflow-scroll">
+          <SubscriptionTable
+            searchTerm={searchTerm}
+            fetchTrigger={fetchTrigger}
+          />
+        </div>
       </div>
     </div>
   )

@@ -38,7 +38,7 @@ const LogoutButton: React.FC = () => {
       onClick={handleLogout}
       className=" flex items-center justify-center py-2.5 px-4 rounded text-center transition duration-200 "
     >
-      <FaSignOutAlt className=" text-2xl text-red-500" />
+      <FaSignOutAlt className="mr-2 text-2xl text-red-500" />
       <span className="hidden md:inline min-w-16">Log Out</span>
     </button>
   )

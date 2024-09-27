@@ -147,13 +147,13 @@ const TransactionsTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
       cell: (row: Transaction) => (
         <div className="flex gap-2">
           <button
-            className="bg-blue-300 p-2"
+            className="bg-blue-300 py-2 px-4"
             onClick={() => handleEdit(row._id)}
           >
             Edit
           </button>
           <button
-            className="bg-red-300 p-2"
+            className="bg-red-300 py-2 px-4"
             onClick={() => handleDeleteClick(row._id)}
           >
             Delete
@@ -165,7 +165,7 @@ const TransactionsTable: React.FC<Props> = ({searchTerm, fetchTrigger}) => {
   ]
 
   return (
-    <div className="border-[1px] border-gray-400 rounded-lg">
+    <div className="border-[1px] border-gray-400">
       <DataTable
         title="Transaction List"
         columns={columns}
