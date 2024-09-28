@@ -18,19 +18,19 @@ const ToastNotification: React.FC<ToastProps> = ({
   return (
     <Toast
       key={id}
-      className={`mb-2 ${type === "success" ? "bg-green-200" : "bg-red-200"}`}
+      className={`mb-2 ${type === "success" ? "bg-green-300" : "bg-red-300"}`}
     >
       <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
         {type === "success" ? (
-          <HiCheck className="h-5 w-5 text-green-500" />
+          <HiCheck className="h-5 w-5 text-green-600" />
         ) : (
-          <HiExclamation className="h-5 w-5 text-red-500" />
+          <HiExclamation className="h-5 w-5 text-red-600" />
         )}
       </div>
       <div className="ml-3 text-sm font-normal px-2">{message}</div>
       <Toast.Toggle
         onClick={() => removeToast(id)}
-        className="bg-transparent"
+        className="bg-transparent text-gray-700"
       />
     </Toast>
   )
