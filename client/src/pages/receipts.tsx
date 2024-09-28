@@ -8,6 +8,10 @@ const Receipts: React.FC = () => {
         <h1 className="text-3xl font-bold text-gray-800 mb-6">
           Receipts - Scan or upload your receipts here
         </h1>
+        <p>
+          Please keep the image size low as possible, since We're using F0 tier
+          on Azure so larger images might not be processed.
+        </p>
         <OCRComponent />
       </div>
     </div>
